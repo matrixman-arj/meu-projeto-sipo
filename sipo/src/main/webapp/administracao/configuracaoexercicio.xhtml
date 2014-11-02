@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/template/template.xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:pe="http://primefaces.org/ui/extensions">
+	<ui:define name="menunav">
+		<h:form>
+			<div style="margin-top: 3px;">
+			    <p:menu style="width:170px; float:left; margin-left: 0.7%">   
+			        <p:submenu label="Cadastros" icon="ui-icon-gear">
+				        <p:menuitem value="#{msgs.label_exercicios_orcamentarios}" url="/administracao/exerciciosorcamentarios.xhtml?i=2"  />			        
+			            <p:menuitem value="#{msgs.label_natureza_despesa}" url="/administracao/naturezadespesas.xhtml?i=2" />	
+			            <p:menuitem value="#{msgs.label_planos_detalhamento}" url="/administracao/planodetalhamento.xhtml?i=2" />
+			            <p:menuitem value="#{msgs.label_acao_orcamentaria}" url="/administracao/acaoorcamentaria.xhtml?i=2" />			        
+			            <p:menuitem value="#{msgs.label_organizacoes_militares}" url="/administracao/organizacaomilitar.xhtml?i=2" />
+			            <p:menuitem value="#{msgs.label_usuario}" url="/administracao/usuario.xhtml?i=2" />
+			        </p:submenu>
+			    </p:menu>
+		    </div>			    			    
+	    </h:form>	
+	</ui:define>				
+	<ui:define name="contents">
+		<div id="contents">
+			<h:panelGroup>
+			
+				<!-- Formulário de cadastro - Mestre -->			
+        		<h:form id="frmcad" style="width:700px;">
+        			<p:panel id="panel" header="#{msgs.header_configuracao_exercicio}" style="margin-bottom:10px; width:95%;">
+        			
+						<p:messages id="msgs"/>        			
+        			
+	        			<h:panelGrid id="cad" columns="2">
+	        				
+							<h:outputLabel value="#{msgs.label_exercicio}:" />
+							<h:outputText value="#{configuracaoExercicioMB.exercicioOrcamentario.ano}" />
+							
+							<h:outputLabel value="#{msgs.label_situacao}:" />
+							<h:outputText value="#{configuracaoExercicioMB.exercicioOrcamentario.situacao}" />
+														
+							<h:outputLabel for="superiores" value="#{msgs.label_subordinacao}:*" />														
+							<p:selectOneMenu id="superiores" value="#{configuracaoExercicioMB.superiorSelected}" 
+								filter="true" filterMatchMode="startsWith" panelStyle="width:250px" 
+								style="width:390px;" required="true" requiredMessage="#{msgs.subordinacao_required}"
+								converter="organizacaoMilitarConverter" disabled="#{configuracaoExercicioMB.habilitar}">
+								<p:ajax listener="#{configuracaoExercicioMB.listSubordinados}" update=":frmcad:subordinados"/>								
+								<f:selectItem itemLabel=""/>
+								<f:selectItems value="#{configuracaoExercicioMB.superiores}" 
+									var="om" itemLabel="#{om.sigla} - #{om.nome}" itemValue="#{om}"/>
+							</p:selectOneMenu>							
+							
+	        			</h:panelGrid>
+						<br/>
+					    <p:fieldset id="fdcad" legend="#{msgs.header_selecao_plano_detalhamento}" style="margin-bottom:20px; margin-botop:20px">
+					        <h:panelGrid columns="2" cellpadding="5">
+					        
+						        <p:outputLabel for="subordinados" value="#{msgs.label_organizacoes_militares}:" />						        
+						        <p:selectOneListbox id="subordinados" value="#{configuracaoExercicioMB.subordinadoSelected}" 
+						        	converter="organizacaoMilitarConverter" style="width: 293px;" required="true" 
+						        	requiredMessage="#{msgs.organizacao_militar_required}" disabled="#{configuracaoExercicioMB.habilitar}">
+						        	<f:selectItems value="#{configuracaoExercicioMB.subordinados}" var="subordinado" 
+						        		itemLabel="#{subordinado.sigla}" itemValue="#{subordinado}" />
+						        </p:selectOneListbox>											
+					        					        
+								<h:outputLabel for="acoes" value="#{msgs.label_acao_orcamentaria}:*" />														
+								<p:selectOneMenu id="acoes" value="#{configuracaoExercicioMB.acaoSelected}" 
+									filter="true" filterMatchMode="startsWith" panelStyle="width:250px" 
+									style="width:293px;" required="true" requiredMessage="#{msgs.acao_orcamentaria_required}"
+									converter="acaoOrcamentariaConverter" disabled="#{configuracaoExercicioMB.habilitar}">
+									<p:ajax listener="#{configuracaoExercicioMB.listPlanos}" update=":frmcad:planos"/>
+									<f:selectItem itemLabel=""/>
+									<f:selectItems value="#{configuracaoExercicioMB.acoes}" 
+										var="acao" itemLabel="#{acao.nome}" itemValue="#{acao}"/>
+								</p:selectOneMenu>
+																								
+						        <p:outputLabel for="planos" value="#{msgs.label_planos_detalhamento}:" />													
+						        <p:selectManyMenu id="planos" value="#{configuracaoExercicioMB.selectedPlanos}" 
+						        	converter="planoDetalhamentoConverter" style="width: 293px;" 
+						        	showCheckbox="true" required="true" requiredMessage="#{msgs.planos_required}"
+						        	disabled="#{configuracaoExercicioMB.habilitar}">
+						        	<f:selectItems value="#{configuracaoExercicioMB.planos}" var="plano" 
+						        		itemLabel="&nbsp;#{plano.nome}" itemValue="#{plano}" />
+						        </p:selectManyMenu>
+																
+					        </h:panelGrid>
+					        <br/>
+							<p:commandButton id="confirmar" value="#{msgs.label_confirmar}" action="#{configuracaoExercicioMB.salvar}" 
+								ajax="false" icon="ui-icon-disk" disabled="#{configuracaoExercicioMB.habilitar}"/> 
+					        
+					    </p:fieldset>
+	        			<div id="info"><p:outputLabel value="#{msgs.indicativo_campos_obrigatorios}"/></div>
+					</p:panel>
+					
+ 					<!-- Tabela detalhe -->
+					<p:dataTable id="dtconfig" var="configuracao" value="#{configuracaoExercicioMB.configuracoes}" style="width:671px;"
+						rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="5,10,15" selectionMode="single" selection="#{configuracaoExercicioMB.configuracaoSelected}" rowKey="#{configuracao.id}">
+
+				        <p:ajax event="rowSelect" listener="#{configuracaoExercicioMB.onRowSelect}" update=":frmcad:panel, :frmcad:fdcad" />
+																		
+						<p:column headerText="#{msgs.label_subordinacao}" filterBy="#{configuracao.superior.sigla}" filterMatchMode="contains" width="120px;">
+							<h:outputText value="#{configuracao.superior.sigla}" />
+						</p:column>
+						
+						<p:column headerText="#{msgs.label_organizacoes_militares}">
+							<h:outputText value="#{configuracao.estabelecimentoEnsino.sigla} - #{configuracao.estabelecimentoEnsino.nome}" />
+						</p:column>
+						
+						<!-- Botão detalhe -->
+				        <p:column style="width:27px;text-align: center;">
+				        	<p:commandButton icon="ui-icon-search" oncomplete="PF('dlg1').show();" immediate="true" 
+				        		update=":frmcad:detalhe" title="#{msgs.label_detalhes}">
+				        		<f:setPropertyActionListener value="#{configuracao}" target="#{configuracaoExercicioMB.configuracaoSelected}"/>
+				        	</p:commandButton>
+				        </p:column>						
+												
+						<!-- Botão teto -->
+				        <p:column style="width:27px;text-align: center;">
+				        	<p:commandButton icon="ui-icon-gear" immediate="true" 
+				        		update=":frmcad:dtteto" title="Tetos Orcamentarios">
+				        		<f:setPropertyActionListener value="#{configuracao}" target="#{configuracaoExercicioMB.configuracaoSelected}"/>
+				        	</p:commandButton>
+				        </p:column>																		
+												
+						<!-- Botão exclusão -->
+				        <p:column style="width:27px;text-align: center;">
+				        	<p:commandButton icon="ui-icon-trash" onclick="PF('dlg2').show();" immediate="true" title="#{msgs.label_excluir}">
+				        		<f:setPropertyActionListener value="#{configuracao}" target="#{configuracaoExercicioMB.configuracaoExercicio}"/>
+				        	</p:commandButton>
+				        </p:column>												
+						
+					</p:dataTable>					
+
+					<p:dataTable id="dtteto" var="teto" 
+						value="#{configuracaoExercicioMB.configuracaoSelected.planos}" 
+						editable="true" style="width:671px; margin-top:10px; margin-bottom:20px;">
+						<f:facet name="header">
+							Configuracao de tetos orcamentarios - #{configuracaoExercicioMB.configuracaoSelected.estabelecimentoEnsino.sigla}
+						</f:facet>
+						
+				       <p:ajax event="rowEdit" listener="#{configuracaoExercicioMB.onRowEdit}" update=":frmcad:msgs" />						 						
+						 						
+						<p:column headerText="Plano de detalhamento" style="width: 180px;">
+							<h:outputText value="#{teto.planoDetalhamento.nome}" />  
+						</p:column>
+						<p:column headerText="Grupo 3">
+							<p:cellEditor>
+								<f:facet name="output"><h:outputText value="#{teto.grupo3}" /></f:facet>
+								<f:facet name="input"><pe:inputNumber value="#{teto.grupo3}" symbol="R$ " style="width:100%"/></f:facet>
+							</p:cellEditor>							
+						</p:column>						
+						<p:column headerText="Grupo 4">
+							<p:cellEditor>						
+								<f:facet name="output"><h:outputText value="#{teto.grupo4}" /></f:facet>
+								<f:facet name="input"><pe:inputNumber value="#{teto.grupo4}" symbol="R$ " style="width:100%"/></f:facet>
+							</p:cellEditor>
+						</p:column>
+						<p:column headerText="Diarias e Passagens" style="width:120px">
+							<p:cellEditor>
+								<f:facet name="output"><h:outputText value="#{teto.diariaPassagem}" /></f:facet>
+								<f:facet name="input"><pe:inputNumber value="#{teto.diariaPassagem}" symbol="R$ " style="width:100%"/></f:facet>								
+							</p:cellEditor>
+						</p:column>			
+						<p:column style="width:32px">
+           					<p:rowEditor />
+       					</p:column>															
+					</p:dataTable>
+				 
+					<!-- Dialog de detalhamento -->
+				    <p:dialog header="#{msgs.header_configuracao_exercicio}" widgetVar="dlg1" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+				        <p:outputPanel id="detalhe" style="text-align:left;">
+				            <p:panelGrid  columns="2" rendered="#{not empty configuracaoExercicioMB.configuracaoSelected}" columnClasses="label,value">
+				            	
+				                <h:outputText value="#{msgs.label_subordinacao}" />
+				                <h:outputText value="#{configuracaoExercicioMB.configuracaoSelected.superior.sigla}" />
+				 
+				                <h:outputText value="#{msgs.label_organizacoes_militares}:" />
+				                <h:outputText value="#{configuracaoExercicioMB.configuracaoSelected.estabelecimentoEnsino.sigla}" />				 
+
+				                <h:outputText value="#{msgs.label_acao_orcamentaria}:" />
+				                <h:outputText value="#{configuracaoExercicioMB.configuracaoSelected.acaoOrcamentaria.nome}" />
+				                							                				                				                
+				            </p:panelGrid> 
+				        </p:outputPanel>
+				    </p:dialog>
+								
+					<!-- Dialog de exclusão -->
+					<p:confirmDialog id="deleteConfirmDialog" message="#{msgs.pergunta_exclusao}" 
+						header="#{msgs.header_confirmacao}" severity="alert" widgetVar="dlg2">
+						
+					    <p:commandButton id="confirm" value="#{msgs.label_sim}"
+                    	    update=":frmcad:dtconfig, :frmcad:msgs"
+                        	oncomplete="PF('dlg2').hide()"
+                        	actionListener="#{configuracaoExercicioMB.excluir}" immediate="true" />
+                        	
+                    	<p:commandButton id="decline" value="#{msgs.label_nao}"
+                        	onclick="PF('dlg2').hide()" type="button" />
+                        	
+					</p:confirmDialog>
+									        			
+        		</h:form>
+        		        		
+			</h:panelGroup>
+		</div>
+	</ui:define>	
+</ui:composition>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/template/template.xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui">
+	<ui:define name="contents">
+		<div id="contents">
+			<h:panelGroup>
+			
+				<!-- Formulario de cadastro - mestre -->
+				<h:form id="frmcad" style="width:700px;"> 
+					<p:panel id="panel" header="#{msgs.header_cadastro_organizacaomilitar}" style="margin-bottom:10px; width:95%;">
+						
+						<p:messages id="mensagem"/>
+						    
+						<h:panelGrid id ="omCad" columns="2">	
+														
+							<h:outputLabel for="superiores" value="#{msgs.label_subordinacao}:*" />
+							<p:selectCheckboxMenu id="superiores" value="#{organizacaoMilitarMB.selectedOMs}" 
+								label="#{msgs.label_organizacoes_militares}" filter="true" filterMatchMode="startsWith" panelStyle="width:250px" 
+								style="width:163px;" converter="organizacaoMilitarConverter">
+								<f:selectItems value="#{organizacaoMilitarMB.omsuperiores}" 
+									var="selecionadas" itemLabel="#{selecionadas.sigla}" itemValue="#{selecionadas}"/>
+							</p:selectCheckboxMenu>
+																	 
+							<h:outputLabel for="codug" value="#{msgs.label_codug}:*" />
+							<p:inputText value="#{organizacaoMilitarMB.organizacaoMilitar.codigo}" id="codug" maxlength="15"
+								required="true" requiredMessage="#{msgs.codug_required}" size="21"/>
+									 													
+							<h:outputLabel for="sigla" value="#{msgs.label_sigla}:*" />
+							<p:inputText value="#{organizacaoMilitarMB.organizacaoMilitar.sigla}" id="sigla" maxlength="15" 
+								required="true" requiredMessage="#{msgs.sigla_required}" size="21"/>
+								
+							<h:outputLabel for="nome" value="#{msgs.label_nome}:*" />
+							<p:inputText value="#{organizacaoMilitarMB.organizacaoMilitar.nome}" id="nome" size="60" maxlength="60" 
+								required="true" requiredMessage="#{msgs.nome_required}"/>      
+							&nbsp;
+							<h:panelGrid columns="2">
+								<p:commandButton value="#{msgs.label_salvar}" action="#{organizacaoMilitarMB.salvar}" ajax="false" 
+									icon="ui-icon-disk"/> 
+							</h:panelGrid>
+																						
+						</h:panelGrid>
+						<div id="info"><p:outputLabel value="#{msgs.indicativo_campos_obrigatorios}"/></div>						
+					</p:panel>
+
+ 					<!-- Tabela detalhe -->
+					<p:dataTable id="dtom" var="organizacao" value="#{organizacaoMilitarMB.organizacoes}" style="width:671px;"
+						rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="5,10,15" selectionMode="single" selection="#{organizacaoMilitarMB.organizacaoSelected}" rowKey="#{organizacao.id}">
+						
+				        <p:ajax event="rowSelect" listener="#{organizacaoMilitarMB.onRowSelect}" update=":frmcad:panel" />
+												
+						<p:column headerText="#{msgs.label_codug}" width="35px;">
+							<h:outputText value="#{organizacao.codigo}" />
+						</p:column>
+											
+						<p:column headerText="#{msgs.label_sigla}" filterBy="#{organizacao.sigla}" filterMatchMode="contains" width="105px;">
+							<h:outputText value="#{organizacao.sigla}" />
+						</p:column>
+						
+						<p:column headerText="#{msgs.label_nome}">
+							<h:outputText value="#{organizacao.nome}" />
+						</p:column>
+										
+						<!-- Botão de detalhamento -->		
+				        <p:column style="width:27px;text-align: center;">
+				        	<p:commandButton icon="ui-icon-search" oncomplete="PF('dlg1').show();" immediate="true" 
+				        		update=":frmcad:detalhe" title="#{msgs.label_detalhes}">
+				        		<f:setPropertyActionListener value="#{organizacao}" target="#{organizacaoMilitarMB.organizacaoSelected}"/>
+				        	</p:commandButton>
+				        </p:column>												
+												
+						<!-- Botão de exclusão -->						
+				        <p:column style="width:27px;text-align: center;">
+				        	<p:commandButton icon="ui-icon-trash" onclick="PF('dlg2').show();" immediate="true" 
+				        		title="#{msgs.label_excluir}">
+				        		<f:setPropertyActionListener value="#{organizacao}" target="#{organizacaoMilitarMB.organizacaoMilitar}"/>
+				        	</p:commandButton>
+				        </p:column>												
+												
+					</p:dataTable>					
+
+
+					<!-- Dialog de detalhamento -->
+				    <p:dialog header="#{msgs.header_detalhes_organizacaomilitar}" widgetVar="dlg1" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+				        <p:outputPanel id="detalhe" style="text-align:center;">
+				            <p:panelGrid  columns="2" rendered="#{not empty organizacaoMilitarMB.organizacaoSelected}" columnClasses="label,value">
+				            
+				                <h:outputText value="#{msgs.label_tipo}:" />
+				                <h:outputText value="#{organizacaoMilitarMB.organizacaoSelected.tipo}" />				            
+				            				 
+				                <h:outputText value="#{msgs.label_codug}:" />
+				                <h:outputText value="#{organizacaoMilitarMB.organizacaoSelected.codigo}" />
+				 
+				                <h:outputText value="#{msgs.label_sigla}" />
+				                <h:outputText value="#{organizacaoMilitarMB.organizacaoSelected.sigla}" />
+				 
+				                <h:outputText value="#{msgs.label_nome}:" />
+				                <h:outputText value="#{organizacaoMilitarMB.organizacaoSelected.nome}" />				 
+				                
+     							<h:outputText value="#{msgs.label_subordinacao}:" />
+				                <p:panel rendered="#{not empty organizacaoMilitarMB.organizacaoSelected.listaSuperiores}">
+ 									<ui:repeat value="#{organizacaoMilitarMB.organizacaoSelected.listaSuperiores}" var="om">
+                						<h:outputText value="#{om.sigla}" style="display:block"/>
+            						</ui:repeat>					                
+				                </p:panel>
+				           
+				            </p:panelGrid>
+				        </p:outputPanel>
+				    </p:dialog>
+				    <!-- Fim Dialog detalhamento -->
+
+					<!-- Dialog da confirmação da exclusão -->					
+					<p:confirmDialog id="deleteConfirmDialog" message="#{msgs.pergunta_exclusao}" 
+						header="#{msgs.header_confirmacao}" severity="alert" widgetVar="dlg2">
+						    <p:commandButton id="confirm" value="#{msgs.label_sim}"
+	                    	    update=":frmcad:superiores, :frmcad:dtom, :frmcad:mensagem"
+	                        	oncomplete="PF('dlg2').hide()"  
+	                        	actionListener="#{organizacaoMilitarMB.excluir}" immediate="true" />	                        	
+	                    	<p:commandButton id="decline" value="#{msgs.label_nao}"
+	                        	onclick="PF('dlg2').hide()" type="button" />
+					</p:confirmDialog>					
+					<!-- Fim Dialog exclusão -->
+					
+				</h:form>
+				<!-- Fim do formulário de cadastro -->
+			</h:panelGroup>
+		</div>
+	</ui:define>	
+</ui:composition>

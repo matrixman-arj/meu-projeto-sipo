@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/template/template.xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui">
+	<ui:define name="contents">
+		<div id="contents">
+			<h:panelGroup>
+			
+				<!-- Formulário de cadastro - Mestre -->
+				<h:form id="frmcad" style="width:700px;"> 
+					<p:panel id="panel" header="#{msgs.header_cadastro_plano_detalhamento}" style="margin-bottom:10px; width:95%;">
+					
+						<p:messages id="mensagem"/>
+						    
+						<h:panelGrid id ="planoCad" columns="2">
+						
+							<h:outputLabel for="codigo" value="#{msgs.label_codigo}:*" />
+							<p:inputText value="#{planoDetalhamentoMB.planoDetalhamento.codigo}" id="codigo" maxlength="15"
+								required="true" requiredMessage="#{msgs.codigo_required}" size="23"/>
+								
+							<h:outputLabel for="nome" value="#{msgs.label_nome}:*" />
+							<p:inputText value="#{planoDetalhamentoMB.planoDetalhamento.nome}" id="nome" size="60" maxlength="60" 
+								required="true" requiredMessage="#{msgs.nome_required}"/>
+								      						 
+							<h:outputLabel for="naturezas" value="#{msgs.label_natureza_despesa}:*" />
+							<p:selectCheckboxMenu id="naturezas" value="#{planoDetalhamentoMB.selectedNaturezas}" 
+								label="#{msgs.label_natureza_despesa}" filter="true" filterMatchMode="startsWith" 
+								panelStyle="width:495px" style="width:180px;" required="true" requiredMessage="#{msgs.naturezas_required}" 
+								converter="naturezaDespesaConverter">
+								<f:selectItems value="#{planoDetalhamentoMB.naturezas}" 
+									var="selecionada" itemLabel="#{selecionada.descricao}" itemValue="#{selecionada}"/>
+							</p:selectCheckboxMenu>
+							&nbsp;
+							<h:panelGrid columns="2">
+								<p:commandButton value="#{msgs.label_salvar}" action="#{planoDetalhamentoMB.salvar}" ajax="false" 
+									icon="ui-icon-disk"/> 
+							</h:panelGrid>															
+						</h:panelGrid>
+						
+						<div id="info"><p:outputLabel value="#{msgs.indicativo_campos_obrigatorios}"/></div>						
+					</p:panel>
+ 					
+ 					<!-- Tabela detalhe -->
+					<p:dataTable id="dtplano" var="plano" value="#{planoDetalhamentoMB.planos}" style="width:671px;"
+						rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="5,10,15" selectionMode="single" selection="#{planoDetalhamentoMB.planoSelected}" rowKey="#{plano.id}">
+						
+				        <p:ajax event="rowSelect" listener="#{planoDetalhamentoMB.onRowSelect}" update=":frmcad:panel" />
+												
+						<p:column headerText="#{msgs.label_codigo}" filterBy="#{plano.codigo}" filterMatchMode="contains" width="120px;">
+							<h:outputText value="#{plano.codigo}" />
+						</p:column>
+						<p:column headerText="#{msgs.label_nome}">
+							<h:outputText value="#{plano.nome}" />
+						</p:column>
+
+						<!-- Botão detalhe -->
+				        <p:column style="width:27px;text-align: center;">
+				        	<p:commandButton icon="ui-icon-search" oncomplete="PF('dlg1').show();" immediate="true" 
+				        		update=":frmcad:detalhe" title="#{msgs.label_detalhes}">
+				        		<f:setPropertyActionListener value="#{plano}" target="#{planoDetalhamentoMB.planoSelected}"/>
+				        	</p:commandButton>
+				        </p:column>
+									
+						<!-- Botão exclusão -->						
+				        <p:column style="width:27px;text-align: center;">
+				        	<p:commandButton icon="ui-icon-trash" onclick="PF('dlg2').show();" immediate="true" title="#{msgs.label_excluir}">
+				        		<f:setPropertyActionListener value="#{plano}" target="#{planoDetalhamentoMB.planoDetalhamento}"/>
+				        	</p:commandButton>
+				        </p:column>						
+						
+					</p:dataTable>
+
+					<!-- Dialog de detalhamento -->
+				    <p:dialog header="#{msgs.header_detalhes_plano_detalhamento}" widgetVar="dlg1" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+				        <p:outputPanel id="detalhe" style="text-align:left;">
+				            <p:panelGrid  columns="2" rendered="#{not empty planoDetalhamentoMB.planoSelected}" columnClasses="label,value">
+				            				 
+				                <h:outputText value="#{msgs.label_codigo}" />
+				                <h:outputText value="#{planoDetalhamentoMB.planoSelected.codigo}" />
+				 
+				                <h:outputText value="#{msgs.label_nome}:" />
+				                <h:outputText value="#{planoDetalhamentoMB.planoSelected.nome}" />				 
+				                				           
+     							<h:outputText value="#{msgs.label_natureza_despesa}:" />
+				                <p:panel rendered="#{not empty planoDetalhamentoMB.planoSelected.naturezasList}">
+ 									<ui:repeat value="#{planoDetalhamentoMB.planoSelected.naturezasList}" var="natureza">
+                						<h:outputText value="#{natureza.descricao}" style="display:block"/>
+            						</ui:repeat>					                
+				                </p:panel>				                				           
+				                							                				           
+				            </p:panelGrid>
+				        </p:outputPanel>
+				    </p:dialog>
+
+					<!-- Dialog de exclusão -->
+					<p:confirmDialog id="deleteConfirmDialog" message="#{msgs.pergunta_exclusao}" 
+						header="#{msgs.header_confirmacao}" severity="alert" widgetVar="dlg2">
+						
+					    <p:commandButton id="confirm" value="#{msgs.label_sim}"
+                    	    update=":frmcad:dtplano, :frmcad:mensagem"
+                        	oncomplete="PF('dlg2').hide()"
+                        	actionListener="#{planoDetalhamentoMB.excluir}" immediate="true" />
+                        	
+                    	<p:commandButton id="decline" value="#{msgs.label_nao}"
+                        	onclick="PF('dlg2').hide()" type="button" />
+                        	
+					</p:confirmDialog>
+
+				</h:form>
+			</h:panelGroup>
+		</div>
+	</ui:define>	
+</ui:composition>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+ <navigation-rule>
+  <from-view-id>*</from-view-id>
+  <navigation-case>
+   <from-action>#{identity.logout}</from-action>
+   <if>#{true}</if>
+   <to-view-id>/login/home.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+ </navigation-rule>
+ <navigation-rule>
+  <from-view-id>/login/home.xhtml</from-view-id>
+  <navigation-case>
+   <from-action>#{identity.login}</from-action>
+   <if>#{identity.loggedIn}</if>
+   <to-view-id>/template/template.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-action>#{identity.login}</from-action>
+   <from-outcome>failed</from-outcome>
+   <to-view-id>/login/home.xhtml</to-view-id>
+  </navigation-case>
+ </navigation-rule>
+ <navigation-rule>
+  <from-view-id>/organizacaomilitar.xhtml</from-view-id>
+  <navigation-case>
+   <from-outcome>success</from-outcome>
+   <to-view-id>/organizacaomilitar.xhtml</to-view-id>
+   <redirect include-view-params="false"/>
+  </navigation-case>
+ </navigation-rule>
+ <navigation-rule>
+  <from-view-id>/administracao/exercicioorcamentario.xhtml</from-view-id>
+  <navigation-case>
+   <from-outcome>success</from-outcome>
+   <to-view-id>/exercicioorcamentario.xhtml</to-view-id>
+   <redirect include-view-params="false"/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>configuracao</from-outcome>
+   <to-view-id>/administracao/configuracaoexercicio.xhtml</to-view-id>
+   <redirect include-view-params="false"/>
+  </navigation-case>
+ </navigation-rule>
+ <navigation-rule>
+  <from-view-id>/naturezadespesas.xhtml</from-view-id>
+  <navigation-case>
+   <from-outcome>success</from-outcome>
+   <to-view-id>/naturezadespesas.xhtml</to-view-id>
+   <redirect include-view-params="false"/>
+  </navigation-case>
+ </navigation-rule>
+ <navigation-rule>
+  <from-view-id>/planodetalhamento.xhtml</from-view-id>
+  <navigation-case>
+   <from-outcome>success</from-outcome>
+   <to-view-id>/planodetalhamento.xhtml</to-view-id>
+   <redirect include-view-params="false"/>
+  </navigation-case>
+ </navigation-rule>
+ <navigation-rule>
+  <from-view-id>/acaoorcamentaria.xhtml</from-view-id>
+  <navigation-case>
+   <from-outcome>success</from-outcome>
+   <to-view-id>/acaoorcamentaria.xhtml</to-view-id>
+   <redirect include-view-params="false"/>
+  </navigation-case>
+ </navigation-rule>
+ <navigation-rule>
+  <from-view-id>/usuario.xhtml</from-view-id>
+  <navigation-case>
+   <from-outcome>success</from-outcome>
+   <to-view-id>/usuario.xhtml</to-view-id>
+   <redirect include-view-params="false"/>
+  </navigation-case>
+ </navigation-rule>
+ <navigation-rule>
+  <from-view-id>/equipamento.xhtml</from-view-id>
+  <navigation-case>
+   <from-outcome>success</from-outcome>
+   <to-view-id>/equipamento.xhtml</to-view-id>
+   <redirect include-view-params="false"/>
+  </navigation-case>
+ </navigation-rule>
+ 
+ <application>
+  <resource-bundle>
+   <base-name>br.mil.eb.decex.ati.messages</base-name>
+   <var>msgs</var>
+  </resource-bundle>
+ </application>
+</faces-config>

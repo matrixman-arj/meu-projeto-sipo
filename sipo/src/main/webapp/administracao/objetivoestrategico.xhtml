@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/template/template.xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui">
+	<ui:define name="menunav">
+		<h:form>
+			<div style="margin-top: 3px;">
+			    <p:menu style="width:170px; float:left; margin-left: 0.7%">   
+			        <p:submenu label="Cadastros" icon="ui-icon-gear">
+				        <p:menuitem value="#{msgs.label_exercicios_orcamentarios}" url="/administracao/exerciciosorcamentarios.xhtml?i=2"  />			        
+			            <p:menuitem value="#{msgs.label_natureza_despesa}" url="/administracao/naturezadespesas.xhtml?i=2" />	
+			            <p:menuitem value="#{msgs.label_planos_detalhamento}" url="/administracao/planodetalhamento.xhtml?i=2" />
+			            <p:menuitem value="#{msgs.label_acao_orcamentaria}" url="/administracao/acaoorcamentaria.xhtml?i=2" />			        
+			            <p:menuitem value="#{msgs.label_organizacoes_militares}" url="/administracao/organizacaomilitar.xhtml?i=2" />
+			            <p:menuitem value="#{msgs.label_objetivo_estrategico}" url="/administracao/objetivoestrategico.xhtml?i=2" />			            			            
+			            <p:menuitem value="#{msgs.label_usuario}" url="/administracao/usuario.xhtml?i=2" />
+			        </p:submenu>
+			    </p:menu>
+		    </div>			    			    
+	    </h:form>	
+	</ui:define>				
+	<ui:define name="contents">
+		<div id="contents">
+			<h:panelGroup>
+				<!-- Formulário de cadastro -->
+				<h:form id="frmcad" style="width:700px;">
+				
+					<!-- Painel Mestre --> 
+					<p:panel id="panel" header="#{msgs.header_cadastro_objetivo_estrategico}" style="margin-bottom:10px; width:95%;">
+					
+						<p:messages id="mensagem"/>
+						    
+						<h:panelGrid id ="cad" columns="2">
+											 									 													
+							<h:outputLabel for="descricao" value="#{msgs.label_descricao}:*" />
+							<p:inputText value="#{objetivoEstrategicoMB.objetivoEstrategico.descricao}" id="descricao" maxlength="50" 
+								required="true" requiredMessage="#{msgs.descricao_required}" size="60"/>
+							&nbsp;
+							<h:panelGrid columns="2">
+								<p:commandButton value="#{msgs.label_salvar}" action="#{objetivoEstrategicoMB.salvar}" ajax="false" 
+									icon="ui-icon-disk"/> 
+							</h:panelGrid>
+																						
+						</h:panelGrid>
+						
+						<div id="info"><p:outputLabel value="#{msgs.indicativo_campos_obrigatorios}"/></div>
+												
+					</p:panel>
+ 					<!-- Fim do painel Mestre -->
+ 						
+ 					<!-- Tabela de detalhe -->	
+					<p:dataTable id="dtobjetivo" var="objetivo" value="#{objetivoEstrategicoMB.objetivos}" style="width:671px;"
+						rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="5,10,15" selectionMode="single" selection="#{objetivoEstrategicoMB.objetivoSelected}" rowKey="#{objetivo.id}">
+						
+				        <p:ajax event="rowSelect" listener="#{objetivoEstrategicoMB.onRowSelect}" update=":frmcad:panel" />
+												
+						<p:column headerText="#{msgs.label_codigo}" width="35px;">
+							<h:outputText value="#{objetivo.id}" />
+						</p:column>
+																	
+						<p:column headerText="#{msgs.label_descricao}"  filterBy="#{objetivo.descricao}" filterMatchMode="contains" >
+							<h:outputText value="#{objetivo.descricao}" />
+						</p:column>
+
+						<!-- Botão de exclusão -->												
+				        <p:column style="width:27px;text-align: center;">
+				        	<p:commandButton icon="ui-icon-trash" onclick="PF('dlg2').show();" immediate="true" title="#{msgs.label_excluir}">
+				        		<f:setPropertyActionListener value="#{objetivo}" target="#{objetivoEstrategicoMB.objetivoEstrategico}"/>
+				        	</p:commandButton>
+				        </p:column>						
+						
+					</p:dataTable>
+					<!-- Fim tabela detalhe -->
+
+					<!-- Dialog de exclusão de registros -->
+					<p:confirmDialog id="deleteConfirmDialog" message="#{msgs.pergunta_exclusao}" 
+						header="#{msgs.header_confirmacao}" severity="alert" widgetVar="dlg2">
+						
+					    <p:commandButton id="confirm" value="#{msgs.label_sim}"
+                    	    update=":frmcad:dtobjetivo, :frmcad:mensagem"
+                        	oncomplete="PF('dlg2').hide()"
+                        	actionListener="#{objetivoEstrategicoMB.excluir}" immediate="true" />
+                        	
+                    	<p:commandButton id="decline" value="#{msgs.label_nao}"
+                        	onclick="PF('dlg2').hide()" type="button" />
+                        	
+					</p:confirmDialog>
+					<!-- Final Dialog de exclusão de registros -->
+
+				</h:form>
+			</h:panelGroup>
+		</div>
+	</ui:define>	
+</ui:composition>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/template/template.xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui">
+	<ui:define name="contents">
+		<div id="contents">
+			<h:panelGroup>
+			
+				<!-- Formulário de cadastro - Mestre -->			
+				<h:form id="frmcad" style="width:700px;"> 
+					<p:panel id="panel" header="#{msgs.header_cadastro_usuario}" style="margin-bottom:10px; width:95%;">
+					
+						<p:messages id="mensagem"/>
+						    
+						<h:panelGrid id ="usuarioCad" columns="2">
+						
+							<h:outputLabel for="cpf" value="#{msgs.label_cpf}:*" />
+							<p:inputMask mask="999.999.999-99" value="#{usuarioMB.usuario.cpf}" id="cpf" maxlength="11"
+								required="true" requiredMessage="#{msgs.cpf_required}" size="30" converter="cpfConverter"/>
+								
+							<h:outputLabel for="nome" value="#{msgs.label_nome}:*" />
+							<p:inputText value="#{usuarioMB.usuario.nome}" id="nome" size="60" maxlength="60" 
+								required="true" requiredMessage="#{msgs.nome_required}"/>
+								
+							<h:outputLabel for="email" value="#{msgs.label_email}:*" />
+							<p:inputText value="#{usuarioMB.usuario.email}" id="email" size="60" maxlength="60" 
+								required="true" requiredMessage="#{msgs.email_required}"/>
+														
+							<h:outputLabel for="identidade" value="#{msgs.label_identidade}:*" />
+							<p:inputText value="#{usuarioMB.usuario.identidade}" id="identidade" size="30" maxlength="20" 
+								required="true" requiredMessage="#{msgs.identidade_required}"/>
+								      						 
+							<h:outputLabel for="nomeGuerra" value="#{msgs.label_nome_guerra}:*" />
+							<p:inputText value="#{usuarioMB.usuario.nomeGuerra}" id="nomeGuerra" size="30" maxlength="30" 
+								required="true" requiredMessage="#{msgs.nome_guerra_required}"/>
+								
+							<h:outputLabel for="posto" value="#{msgs.label_posto_graduacao}:*" />							
+							<p:selectOneMenu id="posto" value="#{usuarioMB.usuario.postoGraduacao}" style="width:227px;" 
+								required="true" requiredMessage="#{msgs.posto_graduacao_required}">
+								<f:selectItem itemLabel=""/>
+								<f:selectItems value="#{usuarioMB.postos}"/>
+							</p:selectOneMenu>
+							
+							<h:outputLabel for="organizacoes" value="#{msgs.label_organizacoes_militares}:*" />														
+							<p:selectOneMenu id="organizacoes" value="#{usuarioMB.organizacaoSelected}" 
+								filter="true" filterMatchMode="startsWith" panelStyle="width:250px" 
+								style="width:227px;" required="true" requiredMessage="#{msgs.organizacao_militar_required}"
+								converter="organizacaoMilitarConverter">
+								<f:selectItem itemLabel=""/>
+								<f:selectItems value="#{usuarioMB.organizacoes}" 
+									var="om" itemLabel="#{om.sigla}" itemValue="#{om}"/>
+							</p:selectOneMenu>
+							
+							<h:outputLabel for="senha" value="#{msgs.label_senha}:*" />
+							<p:password match="confirmsenha" value="#{usuarioMB.usuario.senha}" id="senha" size="30" maxlength="15" 
+								required="true" requiredMessage="#{msgs.senha_required}"/>
+								
+							<h:outputLabel for="confirmsenha" value="#{msgs.label_confirma_senha}:*" />
+							<p:password value="#{usuarioMB.usuario.senha}" id="confirmsenha" size="30" maxlength="15" 
+								required="true" requiredMessage="#{msgs.confirm_senha_required}"/>							
+							&nbsp;
+							<h:panelGrid columns="2">
+								<p:commandButton value="#{msgs.label_salvar}" action="#{usuarioMB.salvar}" ajax="false" 
+									icon="ui-icon-disk"/> 
+							</h:panelGrid>
+																						
+						</h:panelGrid>
+						<div id="info"><p:outputLabel value="#{msgs.indicativo_campos_obrigatorios}"/></div>						
+					</p:panel>
+ 					
+ 					<!-- Tabela detalhe --> 					
+					<p:dataTable id="dtusuario" var="usuario" value="#{usuarioMB.usuarios}" style="width:671px;"
+						rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="5,10,15" selectionMode="single" selection="#{usuarioMB.usuarioSelected}" rowKey="#{usuario.id}">
+						
+				        <p:ajax event="rowSelect" listener="#{usuarioMB.onRowSelect}" update=":frmcad:panel" />
+												
+						<p:column headerText="#{msgs.label_cpf}" filterBy="#{usuario.cpf}" filterMatchMode="contains" width="120px;">
+							<h:outputText value="#{usuario.cpf}" />
+						</p:column>
+						
+						<p:column headerText="#{msgs.label_nome}">
+							<h:outputText value="#{usuario.nome}" />
+						</p:column>
+						
+						<p:column headerText="#{msgs.label_email}">
+							<h:outputText value="#{usuario.email}" />
+						</p:column>
+						
+						<!-- Botão detalhe -->						
+				        <p:column style="width:27px;text-align: center;">
+				        	<p:commandButton icon="ui-icon-search" oncomplete="PF('dlg1').show();" immediate="true" 
+				        		update=":frmcad:detalhe" title="#{msgs.label_detalhes}">
+				        		<f:setPropertyActionListener value="#{usuario}" target="#{usuarioMB.usuarioSelected}"/>
+				        	</p:commandButton>
+				        </p:column>
+						
+						<!-- Botão exclusão -->
+				        <p:column style="width:27px;text-align: center;">
+				        	<p:commandButton icon="ui-icon-trash" onclick="PF('dlg2').show();" immediate="true" title="#{msgs.label_excluir}">
+				        		<f:setPropertyActionListener value="#{usuario}" target="#{usuarioMB.usuario}"/>
+				        	</p:commandButton>
+				        </p:column>						
+						
+					</p:dataTable>
+
+					<!-- Dialog de detalhamento -->
+				    <p:dialog header="#{msgs.header_detalhes_usuario}" widgetVar="dlg1" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+				        <p:outputPanel id="detalhe" style="text-align:left;">
+				            <p:panelGrid  columns="2" rendered="#{not empty usuarioMB.usuarioSelected}" columnClasses="label,value">
+				            				 
+				                <h:outputText value="#{msgs.label_cpf}" />
+				                <h:outputText value="#{usuarioMB.usuarioSelected.cpf}" />
+				 
+				                <h:outputText value="#{msgs.label_nome}:" />
+				                <h:outputText value="#{usuarioMB.usuarioSelected.nome}" />				 
+				                				           
+				                <h:outputText value="#{msgs.label_email}:" />
+				                <h:outputText value="#{usuarioMB.usuarioSelected.email}" />				 				                				           
+
+				                <h:outputText value="#{msgs.label_identidade}:" />
+				                <h:outputText value="#{usuarioMB.usuarioSelected.identidade}" />				 
+				                				           
+				                <h:outputText value="#{msgs.label_nome_guerra}:" />
+				                <h:outputText value="#{usuarioMB.usuarioSelected.nomeGuerra}" />				 				                				           
+				                				    
+				                <h:outputText value="#{msgs.label_posto_graduacao}:" />
+				                <h:outputText value="#{usuarioMB.usuarioSelected.postoGraduacao}" />				 				                
+				                				           
+				                <h:outputText value="#{msgs.label_organizacoes_militares}:" />
+				                <h:outputText value="#{usuarioMB.usuarioSelected.organizacaoMilitar.sigla}" />				              			
+				                				           
+				            </p:panelGrid>
+				        </p:outputPanel>
+				    </p:dialog>
+
+					<!-- Dialog de exclusão -->
+					<p:confirmDialog id="deleteConfirmDialog" message="#{msgs.pergunta_exclusao}" 
+						header="#{msgs.header_confirmacao}" severity="alert" widgetVar="dlg2">
+						
+					    <p:commandButton id="confirm" value="#{msgs.label_sim}"
+                    	    update=":frmcad:dtusuario, :frmcad:mensagem"
+                        	oncomplete="PF('dlg2').hide()"
+                        	actionListener="#{usuarioMB.excluir}" immediate="true" />
+                        	
+                    	<p:commandButton id="decline" value="#{msgs.label_nao}"
+                        	onclick="PF('dlg2').hide()" type="button" />
+                        	
+					</p:confirmDialog>
+
+				</h:form>
+			</h:panelGroup>
+		</div>
+	</ui:define>	
+</ui:composition>

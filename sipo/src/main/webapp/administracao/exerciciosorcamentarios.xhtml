@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/template/template.xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui">
+	<ui:define name="menunav">
+		<h:form>
+			<div style="margin-top: 3px;">
+			    <p:menu style="width:170px; float:left; margin-left: 0.7%">   
+			        <p:submenu label="Cadastros" icon="ui-icon-gear">
+				        <p:menuitem value="#{msgs.label_exercicios_orcamentarios}" url="/administracao/exerciciosorcamentarios.xhtml?i=2"  />			        
+			            <p:menuitem value="#{msgs.label_natureza_despesa}" url="/administracao/naturezadespesas.xhtml?i=2" />	
+			            <p:menuitem value="#{msgs.label_planos_detalhamento}" url="/administracao/planodetalhamento.xhtml?i=2" />
+			            <p:menuitem value="#{msgs.label_acao_orcamentaria}" url="/administracao/acaoorcamentaria.xhtml?i=2" />			        
+			            <p:menuitem value="#{msgs.label_organizacoes_militares}" url="/administracao/organizacaomilitar.xhtml?i=2" />
+			            <p:menuitem value="#{msgs.label_usuario}" url="/administracao/usuario.xhtml?i=2" />
+			        </p:submenu>
+			    </p:menu>
+		    </div>			    			    
+	    </h:form>	
+	</ui:define>
+	<ui:define name="contents">
+		<div id="contents">
+			<h:panelGroup>
+			
+				<!-- Formulario de cadastro - mestre -->			
+				<h:form id="frmcad" style="width:700px;"> 
+					<p:panel id="panel" header="#{msgs.header_exercicio_orcamentario}" style="margin-bottom:10px; width:95%;">
+					
+						<p:messages id="mensagem"/>
+						    
+						<h:panelGrid id ="exercicioCad" columns="2">	
+							
+							<h:outputLabel for="ano" value="#{msgs.label_ano}:*" />
+							
+							<h:panelGrid columns="2">
+							
+								<p:inputMask mask="9999" value="#{exercicioOrcamentarioMB.exercicioOrcamentario.ano}" id="ano" maxlength="15"
+									required="true" requiredMessage="#{msgs.ano_required}" size="21"/>
+									
+						        <p:selectOneButton value="#{exercicioOrcamentarioMB.exercicioOrcamentario.situacao}">
+						        	<f:selectItems value="#{exercicioOrcamentarioMB.situacaoExercicio}"/>
+						        </p:selectOneButton>
+						        
+							</h:panelGrid>
+							
+							<h:outputLabel />
+								 													
+							<p:commandButton value="#{msgs.label_salvar}" action="#{exercicioOrcamentarioMB.salvar()}" ajax="false" 
+								icon="ui-icon-disk"/>
+								 
+						</h:panelGrid>
+						<div id="info"><p:outputLabel value="#{msgs.indicativo_campos_obrigatorios}"/></div>						
+					</p:panel>
+ 					
+ 					<!-- Tabela detalhe --> 					
+					<p:dataTable id="dtexercicio" var="exercicio" value="#{exercicioOrcamentarioMB.exercicios}" style="width:671px;"
+						rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						selectionMode="single" selection="#{exercicioOrcamentarioMB.exercicioSelected}" rowKey="#{exercicio.id}">
+																		
+				        <p:ajax event="rowSelect" listener="#{exercicioOrcamentarioMB.onRowSelect}" update=":frmcad:panel" />																		
+																		
+						<p:column headerText="#{msgs.label_ano}" width="35px;">
+							<h:outputText value="#{exercicio.ano}" />
+						</p:column>					
+						
+						<p:column headerText="#{msgs.label_situacao}" width="300px;">
+							<h:outputText value="#{exercicio.situacao}" />
+						</p:column>
+
+						<!-- Botão de detalhamento -->
+				        <p:column style="width:27px;text-align: center;">
+				        	<p:commandButton icon="ui-icon-search" oncomplete="PF('dlg1').show();" immediate="true" 
+				        		update=":frmcad:detalhe" title="#{msgs.label_detalhes}">
+				        		<f:setPropertyActionListener value="#{exercicio}" target="#{exercicioOrcamentarioMB.exercicioSelected}"/>
+				        	</p:commandButton>
+				        </p:column>
+									
+						<!-- Botão de configuração do exercício -->											
+				        <p:column style="width:27px;text-align: center;">
+				        	<p:commandButton icon="ui-icon-gear" action="#{exercicioOrcamentarioMB.configuracaoExercicioOrcamentario}" immediate="true" title="#{msgs.label_detalhes}">
+								<f:param name="ano" value="#{exercicio.id}"/>
+				        	</p:commandButton>
+				        </p:column>									
+												
+						<!-- Botão de exclusão -->		
+				        <p:column style="width:27px;text-align: center;">
+				        	<p:commandButton icon="ui-icon-trash" onclick="PF('dlg2').show();" immediate="true" title="#{msgs.label_excluir}">
+				        		<f:setPropertyActionListener value="#{exercicio}" target="#{exercicioOrcamentarioMB.exercicioOrcamentario}"/>
+				        	</p:commandButton>
+				        </p:column>						
+						
+					</p:dataTable>
+
+					<!-- Dialog de detalhamento -->
+				    <p:dialog header="#{msgs.header_detalhes_exercicio_orcamentario}" widgetVar="dlg1" modal="true" 
+				    	showEffect="fade" hideEffect="fade" resizable="false">
+				        <p:outputPanel id="detalhe" style="text-align:center;">
+				            <p:panelGrid  columns="2" rendered="#{not empty exercicioOrcamentarioMB.exercicioSelected}" columnClasses="label,value">
+				            
+				                <h:outputText value="#{msgs.label_ano}:" />
+				                <h:outputText value="#{exercicioOrcamentarioMB.exercicioSelected.ano}" />				            
+				            				 
+				                <h:outputText value="#{msgs.label_situacao}:" />
+				                <h:outputText value="#{exercicioOrcamentarioMB.exercicioSelected.situacao}" />
+				 				          				 				      				 				           
+				            </p:panelGrid>
+				        </p:outputPanel>
+				    </p:dialog>
+
+					<!-- Dialog da confirmação da exclusão -->
+					<p:confirmDialog id="deleteConfirmDialog" message="#{msgs.pergunta_exclusao}" 
+						header="#{msgs.header_confirmacao}" severity="alert" widgetVar="dlg2">
+						
+					    <p:commandButton id="confirm" value="#{msgs.label_sim}"
+                    	    update=":frmcad:dtexercicio, :frmcad:mensagem"
+                        	oncomplete="PF('dlg2').hide()"
+                        	actionListener="#{exercicioOrcamentarioMB.excluir}" immediate="true" />
+                        	
+                    	<p:commandButton id="decline" value="#{msgs.label_nao}"
+                        	onclick="PF('dlg2').hide()" type="button" />
+                        	
+					</p:confirmDialog>
+
+				</h:form>
+			</h:panelGroup>
+		</div>
+	</ui:define>	
+</ui:composition>

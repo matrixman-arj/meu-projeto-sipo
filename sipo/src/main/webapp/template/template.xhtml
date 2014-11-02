@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<h:head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+		<title>Sipo - sistema de planejamento or&ccedil;ament&aacute;rio</title>
+		<h:outputStylesheet library="css" name="style.css" />
+	</h:head>
+
+	<h:body>
+		<c:if test="#{identity.loggedIn}">
+			<div id="informacoes">
+				Voc&ecirc; acessou como: <span class="fonteAmarela">#{usuarioLogado.nomeGuerra.toUpperCase()}</span> | 
+				Perfil: <span class="fonteAmarela">#{usuarioLogado.organizacaoMilitar.tipo}</span> | 
+				<span>&nbsp;&nbsp;&nbsp;&nbsp;
+					<p:commandLink styleClass="fonteAmarela" value="#{msgs.label_sair}" action="/login/home?faces-redirect=true" actionListener="#{identity.logout}"/>
+				</span>
+			</div>
+		</c:if>
+		<div id="banner">
+			<p:graphicImage id="logo" library="images" name="logo.png"/>				
+		</div>
+		<div id="barra1"></div>
+		<div id="conteudo">
+			<c:if test="#{identity.loggedIn}">
+				<div id="menuprincipal"> 
+					<ui:include src="/menu/menuprinc.xhtml"/>
+				</div>
+			</c:if>
+			<div id="variavel"> 
+				<p/>
+				<c:if test="#{identity.loggedIn}">
+					<div id="menulateral">
+						<ui:insert name="menunav" />
+					</div>
+				</c:if>						
+				<div id="area"> 
+					<ui:insert name="contents" />						
+				</div>
+			</div>					
+		</div>
+		<div id="rodape">
+			<div id="barra2"></div>
+			Desenvolvido pela Assessoria de Tecnologia da Informa&ccedil;&atilde;o do DECEx. Ritex 810-5099 / 810-5074. 
+			<span class="fonteAmarela">Visualizado a partir da resolu&ccedil;&atilde;o 1152x864.</span>
+		</div>		
+	</h:body>	 	
+</html>

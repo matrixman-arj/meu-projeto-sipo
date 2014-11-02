@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS model-entity="JSFProcess">
+ <PROCESS-ITEM NAME="rules:#organizacaomilitar.xhtml"
+  PATH="/organizacaomilitar.xhtml" SHAPE="32,17,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#organizacaomilitar.xhtml:0" NAME="item"
+   PATH="/organizacaomilitar.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="success::#organizacaomilitar.xhtml"
+    NAME="output" PATH="/organizacaomilitar.xhtml"
+    TARGET="rules:#organizacaomilitar.xhtml" TITLE="success" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#exercicioorcamentario.xhtml"
+  PATH="/exercicioorcamentario.xhtml" SHAPE="240,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#naturezadespesas.xhtml"
+  PATH="/naturezadespesas.xhtml" SHAPE="448,17,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#naturezadespesas.xhtml:0" NAME="item"
+   PATH="/naturezadespesas.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="success::#naturezadespesas.xhtml"
+    NAME="output" PATH="/naturezadespesas.xhtml"
+    TARGET="rules:#naturezadespesas.xhtml" TITLE="success" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#planodetalhamento.xhtml"
+  PATH="/planodetalhamento.xhtml" SHAPE="696,128,50,41" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#planodetalhamento.xhtml:0" NAME="item"
+   PATH="/planodetalhamento.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="success::#planodetalhamento.xhtml"
+    NAME="output" PATH="/planodetalhamento.xhtml"
+    TARGET="rules:#planodetalhamento.xhtml" TITLE="success" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#acaoorcamentaria.xhtml"
+  PATH="/acaoorcamentaria.xhtml" SHAPE="656,33,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#acaoorcamentaria.xhtml:0" NAME="item"
+   PATH="/acaoorcamentaria.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="success::#acaoorcamentaria.xhtml"
+    NAME="output" PATH="/acaoorcamentaria.xhtml"
+    TARGET="rules:#acaoorcamentaria.xhtml" TITLE="success" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#usuario.xhtml" PATH="/usuario.xhtml"
+  SHAPE="128,208,50,41" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#usuario.xhtml:0" NAME="item"
+   PATH="/usuario.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="success::#usuario.xhtml" NAME="output"
+    PATH="/usuario.xhtml" TARGET="rules:#usuario.xhtml" TITLE="success" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#administracao#configuracaoexercicio.xhtml"
+  PATH="/administracao/configuracaoexercicio.xhtml" SHAPE="464,161,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#administracao#exercicioorcamentario.xhtml"
+  PATH="/administracao/exercicioorcamentario.xhtml" SHAPE="32,129,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#administracao#exercicioorcamentario.xhtml:0"
+   NAME="item" PATH="/administracao/exercicioorcamentario.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="success::#exercicioorcamentario.xhtml"
+    NAME="output" PATH="/exercicioorcamentario.xhtml"
+    TARGET="rules:#exercicioorcamentario.xhtml" TITLE="success" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="configuracao::#administracao#configuracaoexercicio.xhtml"
+    NAME="output1" PATH="/administracao/configuracaoexercicio.xhtml"
+    TARGET="rules:#administracao#configuracaoexercicio.xhtml"
+    TITLE="configuracao" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:*" PATH="*" SHAPE="32,273,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:*:0" NAME="item" PATH="*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID=":#{identity.logout}:#login#home.xhtml"
+    NAME="output" PATH="/login/home.xhtml"
+    TARGET="rules:#login#home.xhtml" TITLE="#{identity.logout}:[any]" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#login#home.xhtml" PATH="/login/home.xhtml"
+  SHAPE="256,289,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#login#home.xhtml:0" NAME="item"
+   PATH="/login/home.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID=":#{identity.login}:#template#template.xhtml"
+    NAME="output" PATH="/template/template.xhtml"
+    TARGET="rules:#template#template.xhtml"
+    TITLE="#{identity.login}:[any]" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="failed:#{identity.login}:#login#home.xhtml"
+    NAME="output1" PATH="/login/home.xhtml"
+    TARGET="rules:#login#home.xhtml" TITLE="#{identity.login}:failed" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#template#template.xhtml"
+  PATH="/template/template.xhtml" SHAPE="480,273,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#equipamento.xhtml" PATH="/equipamento.xhtml"
+  SHAPE="32,417,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#equipamento.xhtml:0" NAME="item"
+   PATH="/equipamento.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="success::#equipamento.xhtml" NAME="output"
+    PATH="/equipamento.xhtml" TARGET="rules:#equipamento.xhtml"
+    TITLE="success" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+</PROCESS>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/template/template.xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui">
+	<ui:define name="contents">
+		<div id="contents">
+			<h:panelGroup>
+			
+				<!-- Formulário de cadastro - Mestre -->			
+				<h:form id="frmcad" style="width:700px;"> 
+					<p:panel id="panel" header="#{msgs.header_cadastro_acao_orcamentaria}" style="margin-bottom:10px; width:95%;">
+					
+						<p:messages id="mensagem"/>
+						    
+						<h:panelGrid id ="planoCad" columns="2">
+						
+							<h:outputLabel for="codigo" value="#{msgs.label_codigo}:*" />
+							<p:inputText value="#{acaoOrcamentariaMB.acaoOrcamentaria.codigo}" id="codigo" maxlength="15"
+								required="true" requiredMessage="#{msgs.codigo_required}" size="23"/>
+								
+							<h:outputLabel for="nome" value="#{msgs.label_nome}:*" />
+							<p:inputText value="#{acaoOrcamentariaMB.acaoOrcamentaria.nome}" id="nome" size="60" maxlength="60" 
+								required="true" requiredMessage="#{msgs.nome_required}"/>
+								      						 
+							<h:outputLabel for="planos" value="#{msgs.label_planos_detalhamento}:*" />
+							<p:selectCheckboxMenu id="planos" value="#{acaoOrcamentariaMB.selectedPlanos}" 
+								label="#{msgs.label_planos_detalhamento}" filter="true" filterMatchMode="startsWith" panelStyle="width:495px" 
+								style="width:180px;" required="true" requiredMessage="#{msgs.planos_required}" converter="planoDetalhamentoConverter">
+								<f:selectItems value="#{acaoOrcamentariaMB.planos}" 
+									var="selecionado" itemLabel="#{selecionado.nome}" itemValue="#{selecionado}"/>
+							</p:selectCheckboxMenu>
+							&nbsp;
+							<h:panelGrid columns="2">
+								<p:commandButton value="#{msgs.label_salvar}" action="#{acaoOrcamentariaMB.salvar}" ajax="false" 
+									icon="ui-icon-disk"/> 
+							</h:panelGrid>
+																						
+						</h:panelGrid>
+						<div id="info"><p:outputLabel value="#{msgs.indicativo_campos_obrigatorios}"/></div>						
+					</p:panel>
+ 					
+ 					<!-- Tabela detalhe -->
+					<p:dataTable id="dtacao" var="acao" value="#{acaoOrcamentariaMB.acoes}" style="width:671px;"
+						rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="5,10,15" selectionMode="single" selection="#{acaoOrcamentariaMB.acaoSelected}" rowKey="#{acao.id}">
+						
+				        <p:ajax event="rowSelect" listener="#{acaoOrcamentariaMB.onRowSelect}" update=":frmcad:panel" />
+												
+						<p:column headerText="#{msgs.label_codigo}" filterBy="#{acao.codigo}" filterMatchMode="contains" width="120px;">
+							<h:outputText value="#{acao.codigo}" />
+						</p:column>
+						
+						<p:column headerText="#{msgs.label_nome}">
+							<h:outputText value="#{acao.nome}" />
+						</p:column>
+
+						<!-- Botão detalhe -->
+				        <p:column style="width:27px;text-align: center;">
+				        	<p:commandButton icon="ui-icon-search" oncomplete="PF('dlg1').show();" immediate="true" 
+				        		update=":frmcad:detalhe" title="#{msgs.label_detalhes}">
+				        		<f:setPropertyActionListener value="#{acao}" target="#{acaoOrcamentariaMB.acaoSelected}"/>
+				        	</p:commandButton>
+				        </p:column>
+												
+						<!-- Botão exclusão -->
+				        <p:column style="width:27px;text-align: center;">
+				        	<p:commandButton icon="ui-icon-trash" onclick="PF('dlg2').show();" immediate="true" title="#{msgs.label_excluir}">
+				        		<f:setPropertyActionListener value="#{acao}" target="#{acaoOrcamentariaMB.acaoOrcamentaria}"/>
+				        	</p:commandButton>
+				        </p:column>						
+						
+					</p:dataTable>
+
+					<!-- Dialog de detalhamento -->
+				    <p:dialog header="#{msgs.header_detalhes_acao_orcamentaria}" widgetVar="dlg1" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+				        <p:outputPanel id="detalhe" style="text-align:left;">
+				            <p:panelGrid  columns="2" rendered="#{not empty acaoOrcamentariaMB.acaoSelected}" columnClasses="label,value">
+				            				 
+				                <h:outputText value="#{msgs.label_codigo}" />
+				                <h:outputText value="#{acaoOrcamentariaMB.acaoSelected.codigo}" />
+				 
+				                <h:outputText value="#{msgs.label_nome}:" />
+				                <h:outputText value="#{acaoOrcamentariaMB.acaoSelected.nome}" />				 
+				                				           
+     							<h:outputText value="#{msgs.label_planos_detalhamento}:" />
+				                <p:panel rendered="#{not empty acaoOrcamentariaMB.acaoSelected.planosList}">
+ 									<ui:repeat value="#{acaoOrcamentariaMB.acaoSelected.planosList}" var="plano">
+                						<h:outputText value="#{plano.nome}" style="display:block"/>
+            						</ui:repeat>					                
+				                </p:panel>				                				           
+				                							                				           
+				            </p:panelGrid>
+				        </p:outputPanel>
+				    </p:dialog>
+
+					<!-- Dialog de exclusão -->
+					<p:confirmDialog id="deleteConfirmDialog" message="#{msgs.pergunta_exclusao}" 
+						header="#{msgs.header_confirmacao}" severity="alert" widgetVar="dlg2">
+						
+					    <p:commandButton id="confirm" value="#{msgs.label_sim}"
+                    	    update=":frmcad:dtacao, :frmcad:mensagem"
+                        	oncomplete="PF('dlg2').hide()"
+                        	actionListener="#{acaoOrcamentariaMB.excluir}" immediate="true" />
+                        	
+                    	<p:commandButton id="decline" value="#{msgs.label_nao}"
+                        	onclick="PF('dlg2').hide()" type="button" />
+                        	
+					</p:confirmDialog>
+
+				</h:form>
+			</h:panelGroup>
+		</div>
+	</ui:define>	
+</ui:composition>

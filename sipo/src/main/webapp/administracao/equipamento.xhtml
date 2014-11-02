@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/template/template.xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<ui:define name="contents">
+		<div id="contents">
+			<h:panelGroup>
+				<!-- Formulário de cadastro - Mestre -->
+				<h:form id="frmcad" style="width:700px;">
+					<p:panel id="panel" header="#{msgs.header_cadastro_equipamento}"
+						style="margin-bottom:10px; width:95%;">
+						<p:messages id="mensagem" />
+						<h:panelGrid id="equipamentoCad" columns="2">
+						
+							<h:outputLabel for="id" value="#{msgs.label_id}:*" />
+							<p:inputText value="#{equipamentoMB.equipamento.id}"
+								id="id" size="60" maxlength="60" required="true"
+								requiredMessage="#{msgs.id_required}" />
+						
+							<h:outputLabel for="descricao" value="#{msgs.label_descricao}:*" />
+							<p:inputText value="#{equipamentoMB.equipamento.descricao}"
+								id="descricao" size="60" maxlength="60" required="true"
+								requiredMessage="#{msgs.descricao_required}" />
+								
+							<h:outputLabel for="modelo" value="#{msgs.label_modelo}:*" />
+							<p:inputText value="#{equipamentoMB.equipamento.modelo}"
+								id="modelo" size="60" maxlength="60" required="true"
+								requiredMessage="#{msgs.modelo_required}" />
+								
+							<h:outputLabel for="marca" value="#{msgs.label_marca}:*" />
+							<p:selectOneMenu id="marca"
+								value="#{equipamentoMB.equipamento.marca}" style="width:227px;"
+								required="true" requiredMessage="#{msgs.marca_required}">
+								<f:selectItem itemLabel="" />								
+								<f:selectItems value="#{equipamentoMB.marcaEquipamentos}" />
+							</p:selectOneMenu>
+							
+							<h:outputLabel for="tipo" value="#{msgs.label_tipo}:*" />
+							<p:selectOneMenu id="tipo"
+								value="#{equipamentoMB.equipamento.tipo}" style="width:227px;"
+								required="true" requiredMessage="#{msgs.tipo_required}">
+								<f:selectItem itemLabel="" />
+								<f:selectItems value="#{equipamentoMB.tipoEquipamentos}" />
+							</p:selectOneMenu>
+							
+							<h:panelGrid columns="2">
+								<p:commandButton value="#{msgs.label_salvar}"
+									action="#{equipamentoMB.salvar}" ajax="false"
+									icon="ui-icon-disk" />
+							</h:panelGrid>
+						</h:panelGrid>
+						<div id="info">
+							<p:outputLabel value="#{msgs.indicativo_campos_obrigatorios}" />
+						</div>
+					</p:panel>
+					
+					 					<!-- Tabela detalhe --> 					
+					<p:dataTable id="dtequipamento" var="equipamento" value="#{equipamentoMB.equipamentos}" style="width:671px;"
+						rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="5,10,15" selectionMode="single" selection="#{equipamentoMB.equipamentoSelected}" rowKey="#{equipamento.id}">
+						
+				        <p:ajax event="rowSelect" listener="#{equipamentoMB.onRowSelect}" update=":frmcad:panel" />												
+												
+						<p:column headerText="#{msgs.label_descricao}">
+							<h:outputText value="#{equipamento.descricao}" />
+						</p:column>
+						
+						<p:column headerText="#{msgs.label_modelo}">
+							<h:outputText value="#{equipamento.modelo}" />
+						</p:column>
+						
+						<p:column headerText="#{msgs.label_marca}">
+							<h:outputText value="#{equipamento.marca}" />
+						</p:column>
+						
+						<!-- Botão detalhe -->						
+				        <p:column style="width:27px;text-align: center;">
+				        	<p:commandButton icon="ui-icon-search" oncomplete="PF('dlg1').show();" immediate="true" 
+				        		update=":frmcad:detalhe" title="#{msgs.label_detalhes}">
+				        		<f:setPropertyActionListener value="#{equipamento}" target="#{equipamentoMB.equipamentoSelected}"/>
+				        	</p:commandButton>
+				        </p:column>
+						
+						<!-- Botão exclusão -->
+				        <p:column style="width:27px;text-align: center;">
+				        	<p:commandButton icon="ui-icon-trash" onclick="PF('dlg2').show();" immediate="true" title="#{msgs.label_excluir}">
+				        		<f:setPropertyActionListener value="#{equipamento}" target="#{equipamentoMB.equipamento}"/>
+				        	</p:commandButton>
+				        </p:column>						
+					</p:dataTable>
+					
+					<!-- Dialog de detalhamento -->
+				    <p:dialog header="#{msgs.header_detalhes_equipamento}" widgetVar="dlg1" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+				        <p:outputPanel id="detalhe" style="text-align:left;">
+				            <p:panelGrid  columns="2" rendered="#{not empty equipamentoMB.equipamentoSelected}" columnClasses="label,value">
+				            				 
+				                <h:outputText value="#{msgs.label_id}" />
+				                <h:outputText value="#{equipamentoMB.equipamentoSelected.id}" />
+				                
+				                <h:outputText value="#{msgs.label_descricao}" />
+				                <h:outputText value="#{equipamentoMB.equipamentoSelected.descricao}" />
+				 
+				                <h:outputText value="#{msgs.label_modelo}:" />
+				                <h:outputText value="#{equipamentoMB.equipamentoSelected.modelo}" />				 
+				                				           
+				                <h:outputText value="#{msgs.label_marca}:" />
+				                <h:outputText value="#{equipamentoMB.equipamentoSelected.marca}" />	
+				               
+				                <h:outputText value="#{msgs.label_tipo}:" />
+				                <h:outputText value="#{equipamentoMB.equipamentoSelected.tipo}" />	
+				               
+				               
+				            </p:panelGrid>
+				        </p:outputPanel>
+				    </p:dialog>
+
+					<!-- Dialog de exclusão -->
+					<p:confirmDialog id="deleteConfirmDialog" message="#{msgs.pergunta_exclusao}" 
+						header="#{msgs.header_confirmacao}" severity="alert" widgetVar="dlg2">
+						
+					    <p:commandButton id="confirm" value="#{msgs.label_sim}"
+                    	    update=":frmcad:dtequipamento, :frmcad:mensagem"
+                        	oncomplete="PF('dlg2').hide()"
+                        	actionListener="#{equipamentoMB.excluir}" immediate="true" />
+                        	
+                    	<p:commandButton id="decline" value="#{msgs.label_nao}"
+                        	onclick="PF('dlg2').hide()" type="button" />
+                        	
+					</p:confirmDialog>
+					
+					
+				</h:form>
+			</h:panelGroup>
+
+		</div>
+	</ui:define>
+</ui:composition>

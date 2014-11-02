@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:p="http://primefaces.org/ui"                
+                template="/template/template.xhtml">
+                                
+	<ui:define name="contents">
+		<f:metadata>
+			<f:viewParam name="pagina" value="login"/>
+		</f:metadata>	
+		<div id="content" style="margin: auto;">
+			<p:dialog header="#{msgs.label_credenciais}" visible="true" closable="false" draggable="false" resizable="false" 
+					  footer="#{msgs.footer_credenciais}" rendered="#{not identity.loggedIn}" >
+ 				<p:messages id="messages" />
+				<h:form id="loginForm">				
+					<h:panelGrid columns="2" cellpadding="5">
+						<h:outputLabel for="username" value="#{msgs.label_login}:*" />
+						<p:inputText id="username" value="#{credentials.username}" style="width: 175px;"
+							required="true" requiredMessage="#{msgs.login_required}"/>
+	                	<h:outputLabel for="password" value="#{msgs.label_senha}:*" />
+	                	<p:password id="password" value="#{credentials.password}" style="width: 175px;"
+	                		required="true" requiredMessage="#{msgs.senha_required}"/>
+		                &nbsp;&nbsp;		                		                
+	                	<p:commandButton id="login" action="#{identity.login}" value="#{msgs.label_confirmar}" update="loginForm" ajax="false" />
+					</h:panelGrid>
+				</h:form> 
+			</p:dialog>
+		</div>
+	</ui:define>
+                
+</ui:composition>   

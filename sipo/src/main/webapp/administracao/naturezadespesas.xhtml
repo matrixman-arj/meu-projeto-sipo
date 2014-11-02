@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/template/template.xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui">
+	<ui:define name="contents">
+		<div id="contents">
+			<h:panelGroup>
+				<!-- Formulário de cadastro -->
+				<h:form id="frmcad" style="width:700px;">
+				
+					<!-- Painel Mestre --> 
+					<p:panel id="panel" header="#{msgs.header_cadastro_natureza_despesa}" style="margin-bottom:10px; width:95%;">
+					
+						<p:messages id="mensagem"/>
+						    
+						<h:panelGrid id ="omCad" columns="2">
+											 
+							<h:outputLabel for="grupo" value="#{msgs.label_grupo}:" />
+							<p:selectOneMenu id="grupo" value="#{naturezaDespesaMB.naturezaDespesa.grupo}">
+								<f:selectItem itemLabel="3 - Outras despesas correntes" itemValue="3"/>
+								<f:selectItem itemLabel="4 - Investimentos" itemValue="4"/>								
+							</p:selectOneMenu>
+						
+							<h:outputLabel for="codigo" value="#{msgs.label_codigo}:*" />
+							<p:inputMask mask="99.99.99.99" value="#{naturezaDespesaMB.naturezaDespesa.codigo}" id="codigo" maxlength="8"
+								required="true" requiredMessage="#{msgs.codigo_required}" size="26" converter="codigoNDConverter" />
+									 													
+							<h:outputLabel for="descricao" value="#{msgs.label_descricao}:*" />
+							<p:inputText value="#{naturezaDespesaMB.naturezaDespesa.descricao}" id="descricao" maxlength="50" 
+								required="true" requiredMessage="#{msgs.descricao_required}" size="60"/>
+							&nbsp;
+							<h:panelGrid columns="2">
+								<p:commandButton value="#{msgs.label_salvar}" action="#{naturezaDespesaMB.salvar}" ajax="false" 
+									icon="ui-icon-disk"/> 
+							</h:panelGrid>
+																						
+						</h:panelGrid>
+						
+						<div id="info"><p:outputLabel value="#{msgs.indicativo_campos_obrigatorios}"/></div>
+												
+					</p:panel>
+ 					<!-- Fim do painel Mestre -->
+ 						
+ 					<!-- Tabela de detalhe -->	
+					<p:dataTable id="dtnatureza" var="natureza" value="#{naturezaDespesaMB.naturezas}" style="width:671px;"
+						rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="5,10,15" selectionMode="single" selection="#{naturezaDespesaMB.naturezaSelected}" rowKey="#{natureza.id}">
+						
+				        <p:ajax event="rowSelect" listener="#{naturezaDespesaMB.onRowSelect}" update=":frmcad:panel" />
+												
+						<p:column headerText="#{msgs.label_grupo}" width="35px;">
+							<h:outputText value="#{natureza.grupo}" />
+						</p:column>
+											
+						<p:column headerText="#{msgs.label_codigo}" filterBy="#{natureza.codigo}" filterMatchMode="contains" width="105px;">
+							<h:outputText value="#{natureza.codigoFormatado}" />
+						</p:column>
+						
+						<p:column headerText="#{msgs.label_descricao}">
+							<h:outputText value="#{natureza.descricao}" />
+						</p:column>
+
+						<!-- Botão de exclusão -->												
+				        <p:column style="width:27px;text-align: center;">
+				        	<p:commandButton icon="ui-icon-trash" onclick="PF('dlg2').show();" immediate="true" title="#{msgs.label_excluir}">
+				        		<f:setPropertyActionListener value="#{natureza}" target="#{naturezaDespesaMB.naturezaDespesa}"/>
+				        	</p:commandButton>
+				        </p:column>						
+						
+					</p:dataTable>
+					<!-- Fim tabela detalhe -->
+
+					<!-- Dialog de exclusão de registros -->
+					<p:confirmDialog id="deleteConfirmDialog" message="#{msgs.pergunta_exclusao}" 
+						header="#{msgs.header_confirmacao}" severity="alert" widgetVar="dlg2">
+						
+					    <p:commandButton id="confirm" value="#{msgs.label_sim}"
+                    	    update=":frmcad:dtnatureza, :frmcad:mensagem"
+                        	oncomplete="PF('dlg2').hide()"
+                        	actionListener="#{naturezaDespesaMB.excluir}" immediate="true" />
+                        	
+                    	<p:commandButton id="decline" value="#{msgs.label_nao}"
+                        	onclick="PF('dlg2').hide()" type="button" />
+                        	
+					</p:confirmDialog>
+					<!-- Final Dialog de exclusão de registros -->
+
+				</h:form>
+			</h:panelGroup>
+		</div>
+	</ui:define>	
+</ui:composition>
