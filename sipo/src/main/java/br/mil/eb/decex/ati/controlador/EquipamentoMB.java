@@ -132,11 +132,16 @@ public class EquipamentoMB implements Serializable {
 	 */
 	public String salvar() throws SQLException {
 		
-		String message = (equipamento.getId() == null ? 
+		String message = (equipamento.getId() != null ? 
 			"Registro incluído com sucesso." : "Registro alterado com sucesso.");	
-		
-		service.saveOrUpdate(equipamento);
+		try {
+			service.saveOrUpdate(equipamento);
 			
+		} catch (Exception e) {
+			FacesContext.getCurrentInstance().addMessage(":frmcad:mensagem", 
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), "Confirmação"));
+			return null;
+		}			
 		FacesContext.getCurrentInstance().addMessage(":frmcad:mensagem", 
 			new FacesMessage(FacesMessage.SEVERITY_INFO, message, "Confirmação"));
 		

@@ -13,12 +13,12 @@
 					<p:panel id="panel" header="#{msgs.header_cadastro_equipamento}"
 						style="margin-bottom:10px; width:95%;">
 						<p:messages id="mensagem" />
-						<h:panelGrid id="equipamentoCad" columns="2">
-						
+						<h:panelGrid id="equipamentoCad" columns="2">						
+						 
 							<h:outputLabel for="id" value="#{msgs.label_id}:*" />
 							<p:inputText value="#{equipamentoMB.equipamento.id}"
 								id="id" size="60" maxlength="60" required="true"
-								requiredMessage="#{msgs.id_required}" />
+								requiredMessage="#{msgs.id_required}" />						
 						
 							<h:outputLabel for="descricao" value="#{msgs.label_descricao}:*" />
 							<p:inputText value="#{equipamentoMB.equipamento.descricao}"
