@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
-
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -18,9 +17,9 @@ import br.mil.eb.decex.ati.modelo.Equipamento;
 import br.mil.eb.decex.ati.servico.EquipamentoService;
 
 /**
- * Controlador para view de Usuários. <br/>
+ * Controlador para view de Equipamentos. <br/>
  * Implementado como formulário mestre-detalhe.
- * @author William <b>Moreira</b> de Pinho - 1º Ten QCO
+ * @author <b>Vanilton</b> Gomes dos Santos - 3º Sgt QE
  * @version 1.0
  */
 @ViewScoped
@@ -34,17 +33,12 @@ public class EquipamentoMB implements Serializable {
 
 	private Equipamento equipamento;	
 	
-	@SuppressWarnings("unused")
-	private List<MarcaEquipamento> marca;
-	@SuppressWarnings("unused")
-	private List<TipoEquipamento> tipo;
-	
 	private List<Equipamento> equipamentos;	
 	private Equipamento equipamentoSelected;
 	
 	
 	/**
-	 * Inicializa listas de usuários e 
+	 * Inicializa listas de equipamentos e 
 	 * instancia objetos necessários, além de 
 	 * realizar a limpeza de outros
 	 */			
@@ -62,7 +56,7 @@ public class EquipamentoMB implements Serializable {
 	/**
 	 * Objeto da página que sofrerá atualizações no mecânismo 
 	 * de persistencia
-	 * @return Usuário
+	 * @return Equipamento
 	 */
 	public Equipamento getEquipamento() {
 		return equipamento;
@@ -71,15 +65,15 @@ public class EquipamentoMB implements Serializable {
 	/**
 	 * Objeto da página que sofrerá atualizações no mecânismo 
 	 * de persistencia
-	 * @param equipamento Usuário
+	 * @param equipamento Equipamento
 	 */
 	public void setEquipamento(Equipamento equipamento) {
 		this.equipamento = equipamento;
 	}	
 	
 	/**
-	 * Lista de postos e graduações dos militares
-	 * @return lista de postos e graduações
+	 * Lista da marcas de equipamentos
+	 * @return lista de equipamentos
 	 */
 	public List<MarcaEquipamento> getMarcaEquipamentos() {
 		return Arrays.asList(MarcaEquipamento.values());
@@ -92,7 +86,7 @@ public class EquipamentoMB implements Serializable {
 	/**
 	 * Lista de ações equipamentos cadastrados no  
 	 * banco de dados
-	 * @return lista de usuários
+	 * @return lista de equipamentos
 	 */
 	public List<Equipamento> getEquipamentos() {
 		return equipamentos;
@@ -100,7 +94,7 @@ public class EquipamentoMB implements Serializable {
 		
 	/**
 	 * Objeto utilizado para suporte às funcionalidades 
-	 * de seleção na dataTable e detalhamento de Usuários
+	 * de seleção na dataTable e detalhamento de Equipamentos
 	 * @return Equipamento
 	 */
 	public Equipamento getEquipamentoSelected() {
@@ -109,7 +103,7 @@ public class EquipamentoMB implements Serializable {
 
 	/**
 	 * Objeto utilizado para suporte às funcionalidades 
-	 * de seleção na dataTable e detalhamento de Usuários
+	 * de seleção na dataTable e detalhamento de Equipamentos
 	 * @param equipamentoSelected Equipamento
 	 */
 	public void setEquipamentoSelected(Equipamento equipamentoSelected) {
@@ -119,7 +113,7 @@ public class EquipamentoMB implements Serializable {
 	
 	/**
 	 * Registro selecionado na dataTable da tela e disponibilizado para o 
-	 * usuário realizar detalhamentos nos usuários
+	 * equipamento realizar detalhamentos nos equipamentos
 	 * @param slc evento associado a componente lista do primefaces
 	 */
 	public void onRowSelect(SelectEvent slc) {
@@ -127,12 +121,12 @@ public class EquipamentoMB implements Serializable {
 	}	
 	
 	/**
-	 * Persiste um usuário no banco de dados
+	 * Persiste um equipamento no banco de dados
 	 * @return sucesso caso não ocorra uma exception
 	 */
 	public String salvar() throws SQLException {
 		
-		String message = (equipamento.getId() != null ? 
+		String message = (equipamento.getId() == null ? 
 			"Registro incluído com sucesso." : "Registro alterado com sucesso.");	
 		try {
 			service.saveOrUpdate(equipamento);
@@ -151,7 +145,7 @@ public class EquipamentoMB implements Serializable {
 	}	
 		
 	/**
-	 * Exclui uma ação orçamentária do banco de dados
+	 * Exclui um equipamento do banco de dados
 	 * @return sucesso ou falha
 	 */			
 	public String excluir() {

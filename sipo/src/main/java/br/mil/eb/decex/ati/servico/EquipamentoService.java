@@ -7,7 +7,7 @@ import br.mil.eb.decex.ati.modelo.Equipamento;
 /**
  * Serviço para métodos específicos deste tipo. 
  * 
- * @author William <b>Moreira</b> de Pinho - 1o Ten QCO
+ * @author <b>Vanilton</b> Gomes dos Santos - 3º Sgt QE
  * @version 1.0
  */
 @Local
