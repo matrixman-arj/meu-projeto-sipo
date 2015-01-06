@@ -64,6 +64,9 @@ public class Usuario implements Serializable {
 	
 	@ManyToOne(optional=false, fetch=FetchType.EAGER)
 	private OrganizacaoMilitar organizacaoMilitar;
+	
+	@ManyToOne(optional=false, fetch=FetchType.EAGER)
+	private SecaoAssessoria secaoAssessoria;
 
 	/**
 	 * Identificador de tabela. Código sequencial
@@ -201,7 +204,15 @@ public class Usuario implements Serializable {
 	public OrganizacaoMilitar getOrganizacaoMilitar() {
 		return organizacaoMilitar;
 	}
-
+	
+	/**
+	 * Seção Assessoria em que usuário trabalha
+	 * @return seção assessoria
+	 */
+	public SecaoAssessoria getSecaoAssessoria() {
+		return secaoAssessoria;
+	}
+	
 	/**
 	 * Organização Militar que usuário serve
 	 * @param organizacaoMilitar organização militar
@@ -209,6 +220,14 @@ public class Usuario implements Serializable {
 	public void setOrganizacaoMilitar(OrganizacaoMilitar organizacaoMilitar) {
 		this.organizacaoMilitar = organizacaoMilitar;
 	}
+
+	/**
+	 * Secao Assessoria em que usuário trabalha
+	 * @param organizacaoMilitar secao assessoria
+	 */	
+	public void setSecaoAssessoria(SecaoAssessoria secaoAssessoria) {
+		this.secaoAssessoria = secaoAssessoria;
+	}	
 
 	/**
 	 * Situação do usuário <br/>
@@ -232,6 +251,8 @@ public class Usuario implements Serializable {
 	 * Criptografa senha do usuário com hash MD5
 	 * @throws NoSuchAlgorithmException falha na criptografia da senha
 	 */
+	
+	
 	public void convertSenhaToMD5() throws NoSuchAlgorithmException {
 		if(senha != null && !senha.isEmpty()) 
 			senha = converterSenha(senha);
@@ -253,7 +274,7 @@ public class Usuario implements Serializable {
 		
 		return value;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -263,6 +284,8 @@ public class Usuario implements Serializable {
 				* result
 				+ ((organizacaoMilitar == null) ? 0 : organizacaoMilitar
 						.hashCode());
+		result = prime * result
+				+ ((secaoAssessoria == null) ? 0 : secaoAssessoria.hashCode());
 		result = prime * result
 				+ ((situacao == null) ? 0 : situacao.hashCode());
 		return result;
@@ -287,6 +310,11 @@ public class Usuario implements Serializable {
 				return false;
 		} else if (!organizacaoMilitar.equals(other.organizacaoMilitar))
 			return false;
+		if (secaoAssessoria == null) {
+			if (other.secaoAssessoria != null)
+				return false;
+		} else if (!secaoAssessoria.equals(other.secaoAssessoria))
+			return false;
 		if (situacao != other.situacao)
 			return false;
 		return true;
@@ -294,8 +322,10 @@ public class Usuario implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Usuario [cpf=" + cpf + ", situacao=" + situacao
-				+ ", organizacaoMilitar=" + organizacaoMilitar + "]";
+		return "Usuario [cpf=" + cpf + ", senha=" + senha + ", situacao="
+				+ situacao + ", organizacaoMilitar=" + organizacaoMilitar
+				+ ", secaoAssessoria=" + secaoAssessoria + "]";
 	}
 
+	
 }

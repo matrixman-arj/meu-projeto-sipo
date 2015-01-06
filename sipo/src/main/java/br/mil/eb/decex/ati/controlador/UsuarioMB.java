@@ -16,8 +16,10 @@ import org.primefaces.event.SelectEvent;
 import br.mil.eb.decex.ati.enumerado.Posto;
 import br.mil.eb.decex.ati.excecao.CPFDuplicadoException;
 import br.mil.eb.decex.ati.modelo.OrganizacaoMilitar;
+import br.mil.eb.decex.ati.modelo.SecaoAssessoria;
 import br.mil.eb.decex.ati.modelo.Usuario;
 import br.mil.eb.decex.ati.servico.OrganizacaoMilitarService;
+import br.mil.eb.decex.ati.servico.SecaoAssessoriaService;
 import br.mil.eb.decex.ati.servico.UsuarioService;
 
 /**
@@ -37,9 +39,14 @@ public class UsuarioMB implements Serializable {
 	
 	@Inject
 	private OrganizacaoMilitarService omService;
+	
+	@Inject
+	private SecaoAssessoriaService secService;
 
 	private Usuario usuario;
 	private List<OrganizacaoMilitar> organizacoes;
+	
+	private List<SecaoAssessoria> secoes;
 	
 	@SuppressWarnings("unused")
 	private List<Posto> postos;	
@@ -47,7 +54,7 @@ public class UsuarioMB implements Serializable {
 	private List<Usuario> usuarios;	
 	private Usuario usuarioSelected;
 	private OrganizacaoMilitar organizacaoSelected;
-	
+	private SecaoAssessoria secaoSelected;
 	/**
 	 * Inicializa listas de usuários e 
 	 * instancia objetos necessários, além de 
@@ -62,9 +69,14 @@ public class UsuarioMB implements Serializable {
 		//Carrega as listas de apoio da página				
 		organizacoes = omService.findAll();		
 		usuarios = service.findAll();
+		secoes = secService.findAll();
+	
 
 		//Limpa seleção anterior de organização militar		
 		organizacaoSelected = null;
+		
+		//Limpa seleção anterior de seção assessoria		
+		secaoSelected = null;
 		
 	}
 
@@ -92,6 +104,14 @@ public class UsuarioMB implements Serializable {
 	 */
 	public List<OrganizacaoMilitar> getOrganizacoes() {
 		return organizacoes;
+	}
+	
+	/**
+	 * Lista de planos de seções assessorias
+	 * @return lista de seções assessorias
+	 */
+	public List<SecaoAssessoria> getSecoes() {
+		return secoes;
 	}	
 	
 	/**
@@ -136,6 +156,14 @@ public class UsuarioMB implements Serializable {
 	public OrganizacaoMilitar getOrganizacaoSelected() {
 		return organizacaoSelected;
 	}
+	
+	/**
+	 * Seção Assessoria em que o militar trabalha
+	 * @return seção assessoria
+	 */
+	public SecaoAssessoria getSecaoSelected() {
+		return secaoSelected;
+	}
 
 	/**
 	 * Organização Militar em que o militar serve
@@ -143,6 +171,14 @@ public class UsuarioMB implements Serializable {
 	 */
 	public void setOrganizacaoSelected(OrganizacaoMilitar organizacaoSelected) {
 		this.organizacaoSelected = organizacaoSelected;
+	}
+	
+	/**
+	 * Seção Assessoria em que o militar trabalha
+	 * @return secaoSelected seção assessoria
+	 */
+	public void setSecaoSelected(SecaoAssessoria secaoSelected) {
+		this.secaoSelected = secaoSelected;
 	}
 
 	/**
@@ -153,6 +189,7 @@ public class UsuarioMB implements Serializable {
 	public void onRowSelect(SelectEvent slc) {
 		usuario = (Usuario) slc.getObject();
 		organizacaoSelected = usuario.getOrganizacaoMilitar();
+		secaoSelected = usuario.getSecaoAssessoria();
 	}	
 	
 	/**
@@ -166,6 +203,7 @@ public class UsuarioMB implements Serializable {
 		
 		try {
 			usuario.setOrganizacaoMilitar(organizacaoSelected);
+			usuario.setSecaoAssessoria(secaoSelected);
 			service.saveOrUpdate(usuario);
 		} catch (CPFDuplicadoException e) {
 			FacesContext.getCurrentInstance().addMessage(":frmcad:mensagem", 

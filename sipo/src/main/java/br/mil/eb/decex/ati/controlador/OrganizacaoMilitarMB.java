@@ -26,8 +26,7 @@ public class OrganizacaoMilitarMB implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Inject
-	private OrganizacaoMilitarService service;
-	
+	private OrganizacaoMilitarService service;	
 	private OrganizacaoMilitar organizacaoMilitar;
 	private List<OrganizacaoMilitar> omsuperiores;
 	private List<OrganizacaoMilitar> selectedOMs;

@@ -32,6 +32,14 @@
    <redirect include-view-params="false"/>
   </navigation-case>
  </navigation-rule>
+  <navigation-rule>
+  <from-view-id>/secaoassessoria.xhtml</from-view-id>
+  <navigation-case>
+   <from-outcome>success</from-outcome>
+   <to-view-id>/secaoassessoria.xhtml</to-view-id>
+   <redirect include-view-params="false"/>
+  </navigation-case>
+ </navigation-rule> 
  <navigation-rule>
   <from-view-id>/administracao/exercicioorcamentario.xhtml</from-view-id>
   <navigation-case>

@@ -54,6 +54,16 @@
 									var="om" itemLabel="#{om.sigla}" itemValue="#{om}"/>
 							</p:selectOneMenu>
 							
+							<h:outputLabel for="secoes" value="#{msgs.label_secao_assessoria}:*" />														
+							<p:selectOneMenu id="secoes" value="#{usuarioMB.secaoSelected}" 
+								filter="true" filterMatchMode="startsWith" panelStyle="width:250px" 
+								style="width:227px;" required="true" requiredMessage="#{msgs.secao_assessoria_required}"
+								converter="secaoAssessoriaConverter">
+								<f:selectItem itemLabel=""/>
+								<f:selectItems value="#{usuarioMB.secoes}" 
+									var="secao" itemLabel="#{secao.sigla}" itemValue="#{secao}"/>
+							</p:selectOneMenu>
+							
 							<h:outputLabel for="senha" value="#{msgs.label_senha}:*" />
 							<p:password match="confirmsenha" value="#{usuarioMB.usuario.senha}" id="senha" size="30" maxlength="15" 
 								required="true" requiredMessage="#{msgs.senha_required}"/>

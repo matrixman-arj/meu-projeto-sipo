@@ -11,34 +11,34 @@
 			
 				<!-- Formulario de cadastro - mestre -->
 				<h:form id="frmcad" style="width:700px;"> 
-					<p:panel id="panel" header="#{msgs.header_cadastro_organizacaomilitar}" style="margin-bottom:10px; width:95%;">
+					<p:panel id="panel" header="#{msgs.header_cadastro_secaoassessoria}" style="margin-bottom:10px; width:95%;">
 						
 						<p:messages id="mensagem"/>
 						    
-						<h:panelGrid id ="omCad" columns="2">	
+						<h:panelGrid id ="secCad" columns="2">	
 														
-							<h:outputLabel for="superiores" value="#{msgs.label_subordinacao}:*" />
-							<p:selectCheckboxMenu id="superiores" value="#{organizacaoMilitarMB.selectedOMs}" 
-								label="#{msgs.label_organizacoes_militares}" filter="true" filterMatchMode="startsWith" panelStyle="width:250px" 
-								style="width:163px;" converter="organizacaoMilitarConverter">
-								<f:selectItems value="#{organizacaoMilitarMB.omsuperiores}" 
+							<h:outputLabel for="secsuperiores" value="#{msgs.label_subordinacao}:*" />
+							<p:selectCheckboxMenu id="secsuperiores" value="#{secaoAssessoriaMB.selectedSec}" 
+								label="#{msgs.label_secao_assessoria}" filter="true" filterMatchMode="startsWith" panelStyle="width:250px" 
+								style="width:163px;" converter="secaoAssessoriaConverter">
+								<f:selectItems value="#{secaoAssessoriaMB.secsuperiores}" 
 									var="selecionadas" itemLabel="#{selecionadas.sigla}" itemValue="#{selecionadas}"/>
 							</p:selectCheckboxMenu>
 																	 
 							<h:outputLabel for="codug" value="#{msgs.label_codug}:*" />
-							<p:inputText value="#{organizacaoMilitarMB.organizacaoMilitar.codigo}" id="codug" maxlength="15"
+							<p:inputText value="#{secaoAssessoriaMB.secaoAssessoria.codigo}" id="codug" maxlength="15"
 								required="true" requiredMessage="#{msgs.codug_required}" size="21"/>
 									 													
 							<h:outputLabel for="sigla" value="#{msgs.label_sigla}:*" />
-							<p:inputText value="#{organizacaoMilitarMB.organizacaoMilitar.sigla}" id="sigla" maxlength="15" 
+							<p:inputText value="#{secaoAssessoriaMB.secaoAssessoria.sigla}" id="sigla" maxlength="15" 
 								required="true" requiredMessage="#{msgs.sigla_required}" size="21"/>
 								
 							<h:outputLabel for="nome" value="#{msgs.label_nome}:*" />
-							<p:inputText value="#{organizacaoMilitarMB.organizacaoMilitar.nome}" id="nome" size="60" maxlength="60" 
+							<p:inputText value="#{secaoAssessoriaMB.secaoAssessoria.nome}" id="nome" size="60" maxlength="60" 
 								required="true" requiredMessage="#{msgs.nome_required}"/>      
 							&nbsp;
 							<h:panelGrid columns="2">
-								<p:commandButton value="#{msgs.label_salvar}" action="#{organizacaoMilitarMB.salvar}" ajax="false" 
+								<p:commandButton value="#{msgs.label_salvar}" action="#{secaoAssessoriaMB.salvar}" ajax="false" 
 									icon="ui-icon-disk"/> 
 							</h:panelGrid>
 																						
@@ -47,29 +47,29 @@
 					</p:panel>
 
  					<!-- Tabela detalhe -->
-					<p:dataTable id="dtom" var="organizacao" value="#{organizacaoMilitarMB.organizacoes}" style="width:671px;"
+					<p:dataTable id="dtsec" var="secao" value="#{secaoAssessoriaMB.secoes}" style="width:671px;"
 						rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-						rowsPerPageTemplate="5,10,15" selectionMode="single" selection="#{organizacaoMilitarMB.organizacaoSelected}" rowKey="#{organizacao.id}">
+						rowsPerPageTemplate="5,10,15" selectionMode="single" selection="#{secaoAssessoriaMB.secaoSelected}" rowKey="#{secao.id}">
 						
-				        <p:ajax event="rowSelect" listener="#{organizacaoMilitarMB.onRowSelect}" update=":frmcad:panel" />
+				        <p:ajax event="rowSelect" listener="#{secaoAssessoriaMB.onRowSelect}" update=":frmcad:panel" />
 												
 						<p:column headerText="#{msgs.label_codug}" width="35px;">
-							<h:outputText value="#{organizacao.codigo}" />
+							<h:outputText value="#{secao.codigo}" />
 						</p:column>
 											
-						<p:column headerText="#{msgs.label_sigla}" filterBy="#{organizacao.sigla}" filterMatchMode="contains" width="105px;">
-							<h:outputText value="#{organizacao.sigla}" />
+						<p:column headerText="#{msgs.label_sigla}" filterBy="#{secao.sigla}" filterMatchMode="contains" width="105px;">
+							<h:outputText value="#{secao.sigla}" />
 						</p:column>
 						
 						<p:column headerText="#{msgs.label_nome}">
-							<h:outputText value="#{organizacao.nome}" />
+							<h:outputText value="#{secao.nome}" />
 						</p:column>
 										
 						<!-- Botão de detalhamento -->		
 				        <p:column style="width:27px;text-align: center;">
 				        	<p:commandButton icon="ui-icon-search" oncomplete="PF('dlg1').show();" immediate="true" 
 				        		update=":frmcad:detalhe" title="#{msgs.label_detalhes}">
-				        		<f:setPropertyActionListener value="#{organizacao}" target="#{organizacaoMilitarMB.organizacaoSelected}"/>
+				        		<f:setPropertyActionListener value="#{secao}" target="#{secaoAssessoriaMB.secaoSelected}"/>
 				        	</p:commandButton>
 				        </p:column>												
 												
@@ -77,7 +77,7 @@
 				        <p:column style="width:27px;text-align: center;">
 				        	<p:commandButton icon="ui-icon-trash" onclick="PF('dlg2').show();" immediate="true" 
 				        		title="#{msgs.label_excluir}">
-				        		<f:setPropertyActionListener value="#{organizacao}" target="#{organizacaoMilitarMB.organizacaoMilitar}"/>
+				        		<f:setPropertyActionListener value="#{secao}" target="#{secaoAssessoriaMB.secaoAssessoria}"/>
 				        	</p:commandButton>
 				        </p:column>												
 												
@@ -85,26 +85,26 @@
 
 
 					<!-- Dialog de detalhamento -->
-				    <p:dialog header="#{msgs.header_detalhes_organizacaomilitar}" widgetVar="dlg1" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+				    <p:dialog header="#{msgs.header_detalhes_secaoassessoria}" widgetVar="dlg1" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
 				        <p:outputPanel id="detalhe" style="text-align:center;">
-				            <p:panelGrid  columns="2" rendered="#{not empty organizacaoMilitarMB.organizacaoSelected}" columnClasses="label,value">
+				            <p:panelGrid  columns="2" rendered="#{not empty secaoAssessoriaMB.secaoSelected}" columnClasses="label,value">
 				            
 				                <h:outputText value="#{msgs.label_tipo}:" />
-				                <h:outputText value="#{organizacaoMilitarMB.organizacaoSelected.tipo}" />				            
+				                <h:outputText value="#{secaoAssessoriaMB.secaoSelected.tipo}" />				            
 				            				 
 				                <h:outputText value="#{msgs.label_codug}:" />
-				                <h:outputText value="#{organizacaoMilitarMB.organizacaoSelected.codigo}" />
+				                <h:outputText value="#{secaoAssessoriaMB.secaoSelected.codigo}" />
 				 
 				                <h:outputText value="#{msgs.label_sigla}" />
-				                <h:outputText value="#{organizacaoMilitarMB.organizacaoSelected.sigla}" />
+				                <h:outputText value="#{secaoAssessoriaMB.secaoSelected.sigla}" />
 				 
 				                <h:outputText value="#{msgs.label_nome}:" />
-				                <h:outputText value="#{organizacaoMilitarMB.organizacaoSelected.nome}" />				 
+				                <h:outputText value="#{secaoAssessoriaMB.secaoSelected.nome}" />				 
 				                
      							<h:outputText value="#{msgs.label_subordinacao}:" />
-				                <p:panel rendered="#{not empty organizacaoMilitarMB.organizacaoSelected.listaSuperiores}">
- 									<ui:repeat value="#{organizacaoMilitarMB.organizacaoSelected.listaSuperiores}" var="om">
-                						<h:outputText value="#{om.sigla}" style="display:block"/>
+				                <p:panel rendered="#{not empty secaoAssessoriaMB.secaoSelected.listaSecSuperiores}">
+ 									<ui:repeat value="#{secaoAssessoriaMB.secaoSelected.listaSecSuperiores}" var="secao">
+                						<h:outputText value="#{secao.sigla}" style="display:block"/>
             						</ui:repeat>					                
 				                </p:panel>
 				           
@@ -113,20 +113,20 @@
 				    </p:dialog>
 				    <!-- Fim Dialog detalhamento -->
 
-					<!-- Dialog da confirmaÃ§Ã£o da exclusÃ£o -->					
+					<!-- Dialog da confirmação da exclusão -->					
 					<p:confirmDialog id="deleteConfirmDialog" message="#{msgs.pergunta_exclusao}" 
 						header="#{msgs.header_confirmacao}" severity="alert" widgetVar="dlg2">
 						    <p:commandButton id="confirm" value="#{msgs.label_sim}"
-	                    	    update=":frmcad:superiores, :frmcad:dtom, :frmcad:mensagem"
+	                    	    update=":frmcad:secsuperiores, :frmcad:dtsec, :frmcad:mensagem"
 	                        	oncomplete="PF('dlg2').hide()"  
-	                        	actionListener="#{organizacaoMilitarMB.excluir}" immediate="true" />	                        	
+	                        	actionListener="#{secaoAssessoriaMB.excluir}" immediate="true" />	                        	
 	                    	<p:commandButton id="decline" value="#{msgs.label_nao}"
 	                        	onclick="PF('dlg2').hide()" type="button" />
 					</p:confirmDialog>					
-					<!-- Fim Dialog exclusÃ£o -->
+					<!-- Fim Dialog exclusão -->
 					
 				</h:form>
-				<!-- Fim do formulÃ¡rio de cadastro -->
+				<!-- Fim do formulário de cadastro -->
 			</h:panelGroup>
 		</div>
 	</ui:define>	

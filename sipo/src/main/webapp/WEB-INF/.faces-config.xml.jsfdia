@@ -93,4 +93,13 @@
     TITLE="success" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#secaoassessoria.xhtml"
+  PATH="/secaoassessoria.xhtml" SHAPE="240,433,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#secaoassessoria.xhtml:0" NAME="item"
+   PATH="/secaoassessoria.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="success::#secaoassessoria.xhtml"
+    NAME="output" PATH="/secaoassessoria.xhtml"
+    TARGET="rules:#secaoassessoria.xhtml" TITLE="success" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
 </PROCESS>
